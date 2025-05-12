@@ -3,7 +3,7 @@
  * Provides functions for fetching manhua data
  */
 
-const API_BASE_URL = 'https://api.mangadex.org';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.mangadex.org';
 
 /**
  * Fetch the latest updated manhua
