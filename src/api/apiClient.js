@@ -158,6 +158,116 @@ export const getChapterPages = async (chapterId) => {
   }
 };
 
+/**
+ * Fetch popular manhua
+ * @param {number} limit - Number of results to return (default: 20)
+ * @param {number} offset - Pagination offset (default: 0)
+ * @returns {Promise<Object>} - Popular manhua data
+ */
+export const fetchPopularManhua = async (limit = 20, offset = 0) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/manga?order[followedCount]=desc&limit=${limit}&offset=${offset}`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching popular manhua:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch newly added manhua
+ * @param {number} limit - Number of results to return (default: 20)
+ * @param {number} offset - Pagination offset (default: 0)
+ * @returns {Promise<Object>} - New manhua data
+ */
+export const fetchNewManhua = async (limit = 20, offset = 0) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/manga?order[createdAt]=desc&limit=${limit}&offset=${offset}`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching new manhua:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch manhua by status
+ * @param {string} status - Status to filter by ('ongoing', 'completed', 'hiatus', 'cancelled')
+ * @param {number} limit - Number of results to return (default: 20)
+ * @param {number} offset - Pagination offset (default: 0)
+ * @returns {Promise<Object>} - Filtered manhua data
+ */
+export const fetchManhuaByStatus = async (status, limit = 20, offset = 0) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/manga?status[]=${status}&order[latestUploadedChapter]=desc&limit=${limit}&offset=${offset}`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching ${status} manhua:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Get author information
+ * @param {string} authorId - The ID of the author
+ * @returns {Promise<Object>} - Author data
+ */
+export const getAuthorInfo = async (authorId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/author/${authorId}`);
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching author info:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch manga statistics
+ * @param {string} mangaId - The ID of the manga
+ * @returns {Promise<Object>} - Manga statistics
+ */
+export const getMangaStatistics = async (mangaId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/statistics/manga/${mangaId}`);
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching manga statistics:', error);
+    throw error;
+  }
+};
+
 // Export all functions as a default object
 export default {
   fetchLatestManhua,
@@ -165,5 +275,10 @@ export default {
   getManhuaDetails,
   getCoverImage,
   getChapters,
-  getChapterPages
+  getChapterPages,
+  fetchPopularManhua,
+  fetchNewManhua,
+  fetchManhuaByStatus,
+  getAuthorInfo,
+  getMangaStatistics
 };
